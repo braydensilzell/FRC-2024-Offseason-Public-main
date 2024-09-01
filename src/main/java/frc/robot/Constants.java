@@ -110,7 +110,7 @@ public final class Constants {
         public static final class Mod1 { //TODO: This must be tuned to specific robot
             public static final int driveMotorID = 13; //right back drive
             public static final int angleMotorID = 6; //right back steer
-            public static final int canCoderID = 5; //right back encoder
+            public static final int canCoderID = 5; //right back encoderr
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(60.38);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
