@@ -227,7 +227,7 @@ public final class TunerConstants {
           
             public static final class ArmConstants {
                 public static final int armTalonID = 14;
-        
+        //shhoter
                 public static final double armGearRatio = 27.10; // Sensor to Mechanism Ratio
         
                 public static final double ArmIntakeAngle = 10;
