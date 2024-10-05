@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.Arm;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -13,31 +13,31 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.WristConstants;
+import frc.robot.generated.TunerConstants.ArmConstants;
 
-public class Wrist extends SubsystemBase {
+public class Arm extends SubsystemBase {
 
-    private TalonFX m_wristMotor;
-  /** Creates a new Wrist. */
-  public Wrist() {
-    m_wristMotor = new TalonFX(WristConstants.wristTalonID);
-    m_wristMotor.getConfigurator().apply(WristConstants.kWristConfiguration, 1);
+    private TalonFX m_armMotor;
+  /** Creates a new Arm. */
+  public Arm() {
+    m_armMotor = new TalonFX(ArmConstants.armTalonID, "CAN0");
+    m_armMotor.getConfigurator().apply(ArmConstants.kArmConfiguration, 1);
 
-    this.m_wristMotor.setPosition(0);
-    this.m_wristMotor.set(0);
-    //hi
+    this.m_armMotor.setPosition(0);
+    this.m_armMotor.set(0);
+    //
   }
    /**
-   * PID wrist to position
+   * PID arm to position
    * 
    * @param rotations 0 to 1 rotations
    */
   private void setAngle(double position) {
-   m_wristMotor.setControl(WristConstants.wristPositionControl.withPosition(position));
+   m_armMotor.setControl(ArmConstants.armPositionControl.withPosition(position));
   }
 
   /**
-   * PID wrist to position
+   * PID arm to position
    * 
    * @param rotations Rotation 2d
    */
@@ -57,44 +57,44 @@ public class Wrist extends SubsystemBase {
   }
 
   public Rotation2d getSetpointError() {
-    return Rotation2d.fromRotations(m_wristMotor.getClosedLoopError().getValue());
+    return Rotation2d.fromRotations(m_armMotor.getClosedLoopError().getValue());
   }
 
   public boolean isAtSetpoint() {
-    return Math.abs(getSetpointError().getDegrees()) <= WristConstants.angleErrorTolerance.getDegrees();
+    return Math.abs(getSetpointError().getDegrees()) <= ArmConstants.angleErrorTolerance.getDegrees();
   }
 
   public Rotation2d getAngle() {
-    return Rotation2d.fromRotations(m_wristMotor.getPosition().getValue());
+    return Rotation2d.fromRotations(m_armMotor.getPosition().getValue());
   }
 
   public double getVoltageOut() {
-    return m_wristMotor.getMotorVoltage().getValue();
+    return m_armMotor.getMotorVoltage().getValue();
   }
 
   public void stop() {
-    m_wristMotor.setControl(new DutyCycleOut(0));
+    m_armMotor.setControl(new DutyCycleOut(0));
   }
 
-  public void setwristVoltage(double volts) {
-    m_wristMotor.setControl(new VoltageOut(volts));
+  public void setarmVoltage(double volts) {
+    m_armMotor.setControl(new VoltageOut(volts));
   }
 
   
   // To position for Intake, move Arm to INTAKE position
     public Command prepareForIntakeCommand() {
-        return new RunCommand(()-> this.setAngle(Rotation2d.fromDegrees(WristConstants.WristIntakeAngle)), this)
+        return new RunCommand(()-> this.setAngle(Rotation2d.fromDegrees(ArmConstants.ArmIntakeAngle)), this)
             .until(()->this.isAtSetpoint());
     }   
 
-    public Command stowwristCommand() {
+    public Command stowarmCommand() {
       return new RunCommand(()->this.stow(), this);
   }
 
   @Override
   public void periodic() {
 
-    SmartDashboard.putNumber("wristError", getSetpointError().getDegrees());
-    SmartDashboard.putNumber("wristCurrentAngle", getAngle().getDegrees());
+    SmartDashboard.putNumber("armError", getSetpointError().getDegrees());
+    SmartDashboard.putNumber("armCurrentAngle", getAngle().getDegrees());
   }
 }
